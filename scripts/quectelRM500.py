@@ -29,7 +29,6 @@ print(response.full_response)
 response = atrunenv.exec('AT+CGDCONT=1,"IPV4V6","oai"')
 print(response.full_response)
 exit(0)
-atrunenv.add_command('AT')
 
 # Execute commands
 try:
