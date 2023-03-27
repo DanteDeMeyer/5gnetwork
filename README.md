@@ -1,4 +1,2 @@
 # 5gnetwork
-This contains my scripts to automate 5g network testing. 
-The 'scripts' dirctoty contains 3 files. 2 bash scripts for the iperf3 and the ping log's. The other one is a python script for the AT commands (UE side)
-Work in progress.
+The directory named 'scripts' contains three files that are used to automate 5G network testing. Specifically, there are two bash scripts that are used for generating log files for iperf3 and ping tests. Additionally, there is a python script that is used for sending AT commands from the UE side. However, please note that this work is still in progress and may be subject to changes in the future.
