@@ -27,4 +27,5 @@ direction=$6
 # Run the iperf3 and add timestamp
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 echo $timestamp >> "$log_file"
-iperf3 -c "$ip_addr" "$protocol" -t"$duration" -b "$direction" "$bandwitdh" | awk '{print $7,$8,$9,$10}'| head -n 14 | tail -n 10 >"$log_file"
+iperf3 -c "$ip_addr" "$protocol" -t"$duration" -b "$direction" "$bandwitdh" | awk '{print $7,$8,$9,$10}'| head -n 14 | tail -n 10
+echo iperf3 successfully done for $2 seconds to $1

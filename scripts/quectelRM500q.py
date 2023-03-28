@@ -2,6 +2,7 @@
 import logging
 import os
 import argparse
+import time
 from datetime import datetime
 from attila.atre import ATRuntimeEnvironment
 from attila.exceptions import ATREUninitializedError, ATRuntimeError, ATScriptNotFound, ATScriptSyntaxError, ATSerialPortError
@@ -10,7 +11,6 @@ from attila.exceptions import ATREUninitializedError, ATRuntimeError, ATScriptNo
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='CLI tool for interacting with a Quectel modem')
 parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial device path')
-parser.add_argument('-b', '--baud_rate', type=int, default=115200, help='serial baud rate')
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
 parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging directory')
 parser.add_argument('-f', '--logfile', default='my_log_file.txt', help='name of the log file')
@@ -18,6 +18,7 @@ args = parser.parse_args()
 
 # Configuration
 line_break = '\r\n'
+baud_rate = 115200
 
 # Check if log directory exists, create it if not
 if not os.path.exists(args.logdir):
@@ -27,7 +28,7 @@ if not os.path.exists(args.logdir):
 atrunenv = ATRuntimeEnvironment(True)
 
 # Configure communicator
-atrunenv.configure_communicator(args.device, args.baud_rate, args.timeout, line_break)
+atrunenv.configure_communicator(args.device, baud_rate, args.timeout, line_break)
 
 # Open serial port
 atrunenv.open_serial()
@@ -38,7 +39,6 @@ response_code = response.full_response[1].strip("'")
 if response_code != 'OK':
     print(f"Device path {args.device} is wrong")
     atrunenv.close_serial()
-    exit(1)
 
 # Create logger
 logger = logging.getLogger('my_logger')
@@ -69,8 +69,10 @@ def execute_command(command):
 try:
     execute_command('AT+CIMI')
     execute_command('AT+cfun=0')
-    execute_command('AT+CGDCONT=1,"IPV4V6","oai"')
+#    execute_command('AT+CGDCONT=1,"IPV4V6","oai"')
+    time.sleep(3)
     execute_command('AT+cfun=1')
+    time.sleep(10)
     execute_command('AT+CSQ')
     execute_command('AT+QRSRP')
     execute_command('AT+QRSRQ')
