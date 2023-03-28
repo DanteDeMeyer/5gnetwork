@@ -3,6 +3,7 @@ import logging
 import os
 import argparse
 import time
+import csv
 from datetime import datetime
 from attila.atre import ATRuntimeEnvironment
 from attila.exceptions import ATREUninitializedError, ATRuntimeError, ATScriptNotFound, ATScriptSyntaxError, ATSerialPortError
@@ -13,7 +14,7 @@ parser = argparse.ArgumentParser(description='CLI tool for interacting with a Qu
 parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial device path')
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
 parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging directory')
-parser.add_argument('-f', '--logfile', default='my_log_file.txt', help='name of the log file')
+parser.add_argument('-f', '--logfile', default='my_log_file.csv', help='name of the log file')
 args = parser.parse_args()
 
 # Configuration
@@ -35,10 +36,11 @@ atrunenv.open_serial()
 
 # Check if device exists by sending an AT command and checking for an 'OK' response
 response = atrunenv.exec('AT')
-response_code = response.full_response[1].strip("'")
-if response_code != 'OK':
+if len(response.full_response) == 0:
     print(f"Device path {args.device} is wrong")
-    atrunenv.close_serial()
+    exit(1)
+else:
+   print(f"Device path {args.device} is OK")
 
 # Create logger
 logger = logging.getLogger('my_logger')
@@ -50,7 +52,7 @@ file_handler = logging.FileHandler(log_file)
 file_handler.setLevel(logging.INFO)
 
 # Create formatter
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(message)s')
 file_handler.setFormatter(formatter)
 
 # Add file handler to logger
@@ -60,7 +62,6 @@ logger.addHandler(file_handler)
 # Function to execute command and log response
 def execute_command(command):
     response = atrunenv.exec(command)
-    logger.info(f'{command}:')
     print(command)
     response_code = response.full_response[1].strip("'")
     print(response_code)
@@ -72,29 +73,24 @@ try:
 #    execute_command('AT+CGDCONT=1,"IPV4V6","oai"')
     time.sleep(3)
     execute_command('AT+cfun=1')
-    time.sleep(10)
-    execute_command('AT+CSQ')
-    execute_command('AT+QRSRP')
-    execute_command('AT+QRSRQ')
-    execute_command('AT+QSINR')
-    execute_command('AT+QNWCFG="nr5g_csi"')
-
+    time.sleep(5)
+    response_dict={}
+    response_dict['Date']= time.asctime(time.localtime())
+    response_dict['RSSI'] = execute_command('AT+CSQ').full_response[1].strip("'")
+    response_dict['PRX path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[0]
+    response_dict['DRX path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[1]
+    response_dict['RX2 path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[2]
+    response_dict['RX3 path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[3]
+    response_dict['PRX path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[0]
+    response_dict['DRC path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[1]
+    response_dict['RX2 path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[2]
+    response_dict['RX3 path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[3]
+    response_dict['PRX path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[0]
+    response_dict['DRX path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[1]
+    response_dict['RX2 path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[2]
+    response_dict['RX3 path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[3]
+    print(response_dict)
  # Log the output of the specified AT commands
-    #response = execute_command('AT+CSQ')
-    logger.info('AT+CSQ:')
-    logger.info(response.full_response)
-
-    logger.info('AT+QRSRP:')
-    logger.info(response.full_response)
-
-    logger.info('AT+QRSRQ:')
-    logger.info(response.full_response)
-
-    logger.info('AT+QSINR:')
-    logger.info(response.full_response)
-
-    logger.info('AT+QNWCFG="nr5g_csi":')
-    logger.info(response.full_response)
 
 # Check for error
 except (ATREUninitializedError, ATRuntimeError, ATScriptNotFound, ATScriptSyntaxError, ATSerialPortError) as e:
