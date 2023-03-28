@@ -19,7 +19,8 @@ fi
 ip_addr=$1
 duration=$2
 protocol=$3
-log_file=/home/dante/logs/$4
+log_file_name=$(echo "$4" | sed 's/\.[^.]*$//')
+log_file=/home/dante/logs/$log_file_name.csv
 bandwidth=$5
 direction=$6
 
