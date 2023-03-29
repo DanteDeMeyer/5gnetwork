@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(description='CLI tool for interacting with a Qu
 parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial device path')
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
 parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging directory')
-parser.add_argument('-f', '--logfile', default='my_log_file8.csv', help='name of the log file (should be .csv)')
+parser.add_argument('-f', '--logfile', default='my_log_file4.csv', help='name of the log file')
 args = parser.parse_args()
 
 # Configuration
@@ -43,13 +43,13 @@ else:
    print(f"Device path {args.device} is OK")
 
 # Create logger
-#logger = logging.getLogger('my_logger')
-#logger.setLevel(logging.INFO)
+logger = logging.getLogger('my_logger')
+logger.setLevel(logging.INFO)
 
 # Create file handler
-#log_file = os.path.join(args.logdir, args.logfile)
-#file_handler = logging.FileHandler(log_file)
-#file_handler.setLevel(logging.INFO)
+log_file = os.path.join(args.logdir, args.logfile)
+file_handler = logging.FileHandler(log_file)
+file_handler.setLevel(logging.INFO)
 
 # Create formatter
 #formatter = logging.Formatter('%(asctime)s - %(message)s')
@@ -57,10 +57,15 @@ else:
 
 # Add file handler to logger
 #logger.addHandler(file_handler)
-dirpath = args.logdir
-filename= os.path.basename(args.logfile)
-path = dirpath + '/' + filename
 response_dict={}
+
+# Create CSV writer
+csv_writer = csv.DictWriter(file_handler.stream, fieldnames=response_dict.keys())
+
+# Write header row to CSV file
+csv_writer.writeheader()
+
+
 # Function to execute command and log response
 def execute_command(command):
     response = atrunenv.exec(command)
@@ -105,14 +110,13 @@ try:
     headers = response_dict.keys()
 
 # Create the CSV file if it does not exist
-    if not os.path.exists(path):
-        log_file = os.path.join(args.logdir, args.logfile)
+    if not os.path.exists(log_file):
         with open(log_file, mode='w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(headers)
 
 # Write the dictionary values to the CSV file
-    with open(path, mode='a', newline='') as csv_file:
+    with open(log_file, mode='a', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=headers)
         writer.writerow(response_dict)
 
