@@ -17,6 +17,15 @@ parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging 
 parser.add_argument('-f', '--logfile', default='my_log_file8.csv', help='name of the log file (should be .csv)')
 args = parser.parse_args()
 
+# Check if the logfile has .csv extension or not
+if not args.logfile.endswith('.csv'):
+    if '.' in args.logfile:
+        file_split = args.logfile.split('.')
+        args.logfile = file_split[0] + '.csv'
+    else:
+        args.logfile += '.csv'
+print(args.logfile)
+exit(0)
 # Configuration
 line_break = '\r\n'
 baud_rate = 115200
