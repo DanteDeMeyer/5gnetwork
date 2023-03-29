@@ -52,11 +52,18 @@ file_handler = logging.FileHandler(log_file)
 file_handler.setLevel(logging.INFO)
 
 # Create formatter
-formatter = logging.Formatter('%(asctime)s - %(message)s')
-file_handler.setFormatter(formatter)
+#formatter = logging.Formatter('%(asctime)s - %(message)s')
+#file_handler.setFormatter(formatter)
 
 # Add file handler to logger
-logger.addHandler(file_handler)
+#logger.addHandler(file_handler)
+response_dict={}
+
+# Create CSV writer
+csv_writer = csv.DictWriter(file_handler.stream, fieldnames=response_dict.keys())
+
+# Write header row to CSV file
+csv_writer.writeheader()
 
 
 # Function to execute command and log response
@@ -74,7 +81,6 @@ try:
     time.sleep(3)
     execute_command('AT+cfun=1')
     time.sleep(5)
-    response_dict={}
     response_dict['Date']= time.asctime(time.localtime())
     response_dict['RSSI'] = execute_command('AT+CSQ').full_response[1].strip("'")
     response_dict['PRX path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[0]
@@ -89,8 +95,21 @@ try:
     response_dict['DRX path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[1]
     response_dict['RX2 path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[2]
     response_dict['RX3 path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[3]
-    print(response_dict)
- # Log the output of the specified AT commands
+
+
+# Get the headers from the dictionary keys
+#    headers = response_dict.keys()
+
+# Create the CSV file if it does not exist
+ #   if not os.path.exists(log_file):
+  #      with open(log_file, mode='w', newline='') as csv_file:
+   #         writer = csv.writer(csv_file)
+    #        writer.writerow(headers)
+
+# Write the dictionary values to the CSV file
+    #with open(log_file, mode='a', newline='') as csv_file:
+     #   writer = csv.DictWriter(csv_file, fieldnames=headers)
+      #  writer.writerow(response_dict)
 
 # Check for error
 except (ATREUninitializedError, ATRuntimeError, ATScriptNotFound, ATScriptSyntaxError, ATSerialPortError) as e:
