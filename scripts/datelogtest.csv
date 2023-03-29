@@ -1,2 +1,0 @@
-Date,RSSI,PRX path RSRP value,DRX path RSRP value,RX2 path RSRP value,RX3 path RSRP value,PRX path RSRQ value,DRC path RSRQ value,RX2 path RSRQ value,RX3 path RSRQ value,PRX path SINR value,DRX path SINR value,RX2 path SINR value,RX3 path SINR value
-W,+,+,-,-,-,+,-,-,-,+,6,7,2

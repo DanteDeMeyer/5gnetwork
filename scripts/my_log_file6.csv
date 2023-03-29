@@ -1,5 +1,0 @@
-Date,RSSI (dBm),PRX path RSRP value (dBm),DRX path RSRP value (dBm),RX2 path RSRP value (dBm),RX3 path RSRP value (dBm),PRX path RSRQ value (dB),DRC path RSRQ value (dB),RX2 path RSRQ value (dB),RX3 path RSRQ value (dB),PRX path SINR value (dB),DRX path SINR value (dB),RX2 path SINR value (dB),RX3 path SINR value (dB)
-Wed Mar 29 18:38:00 2023, 99, -92,-98,-82,-83, -10,-11,-32768,-32768, 7,8,-32768,-32768
-Wed Mar 29 18:39:09 2023, 99, -92,-98,-82,-83, -10,-11,-32768,-32768, 7,8,-32768,-32768
-Wed Mar 29 18:42:21 2023, 99, -92,-98,-82,-83, -10,-11,-32768,-32768, 6,7,-32768,-32768
-Wed Mar 29 18:48:34 2023, 99, -91,-97,-82,-83, -10,-10,-32768,-32768, 5,3,-32768,-32768

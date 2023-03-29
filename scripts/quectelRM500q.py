@@ -15,6 +15,7 @@ parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial devic
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
 parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging directory')
 parser.add_argument('-f', '--logfile', default='my_log_file8.csv', help='name of the log file (should be .csv)')
+parser.add_argument('-s', '--setup', action="store_true", help='choose full setup +logs or capture logs')
 args = parser.parse_args()
 
 # Check if the logfile has .csv extension or not
