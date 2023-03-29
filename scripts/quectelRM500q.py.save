@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(description='CLI tool for interacting with a Qu
 parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial device path')
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
 parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging directory')
-parser.add_argument('-f', '--logfile', default='my_log_file4.csv', help='name of the log file')
+parser.add_argument('-f', '--logfile', default='my_log_file.csv', help='name of the log file')
 args = parser.parse_args()
 
 # Configuration
@@ -60,10 +60,10 @@ file_handler.setLevel(logging.INFO)
 response_dict={}
 
 # Create CSV writer
-csv_writer = csv.DictWriter(file_handler.stream, fieldnames=response_dict.keys())
+#csv_writer = csv.DictWriter(file_handler.stream, fieldnames=response_dict.keys())
 
 # Write header row to CSV file
-csv_writer.writeheader()
+#csv_writer.writeheader()
 
 
 # Function to execute command and log response
@@ -81,44 +81,35 @@ try:
     time.sleep(3)
     execute_command('AT+cfun=1')
     time.sleep(5)
-  # Execute each AT command once and store the results in a variable
-    csq_response = execute_command('AT+CSQ').full_response[1].strip("'").split(',')
-    qrsrp_response = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')
-    qrsrq_response = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')
-    qsinr_response = execute_command('AT+QSINR').full_response[1].strip("'").split(',')
+    response_dict['Date']= time.asctime(time.localtime())
+    response_dict['RSSI'] = execute_command('AT+CSQ').full_response[1].strip("'")
+    response_dict['PRX path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[0]
+    response_dict['DRX path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[1]
+    response_dict['RX2 path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[2]
+    response_dict['RX3 path RSRP value'] = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')[3]
+    response_dict['PRX path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[0]
+    response_dict['DRC path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[1]
+    response_dict['RX2 path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[2]
+    response_dict['RX3 path RSRQ value'] = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')[3]
+    response_dict['PRX path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[0]
+    response_dict['DRX path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[1]
+    response_dict['RX2 path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[2]
+    response_dict['RX3 path SINR value'] = execute_command('AT+QSINR').full_response[1].strip("'").split(',')[3]
 
-    # Populate the dictionary with the results
-    response_dict = {
-        'Date': time.asctime(time.localtime()),
-        'RSSI': csq_response[0].split(':')[1],
-        'PRX path RSRP value': qrsrp_response[0].split(':')[1],
-        'DRX path RSRP value': qrsrp_response[1],
-        'RX2 path RSRP value': qrsrp_response[2],
-        'RX3 path RSRP value': qrsrp_response[3],
-        'PRX path RSRQ value': qrsrq_response[0].split(':')[1],
-        'DRC path RSRQ value': qrsrq_response[1],
-        'RX2 path RSRQ value': qrsrq_response[2],
-        'RX3 path RSRQ value': qrsrq_response[3],
-        'PRX path SINR value': qsinr_response[0].split(':')[1],
-        'DRX path SINR value': qsinr_response[1],
-        'RX2 path SINR value': qsinr_response[2],
-        'RX3 path SINR value': qsinr_response[3]
-    }
-    print(response_dict)
 
 # Get the headers from the dictionary keys
-    headers = response_dict.keys()
+#    headers = response_dict.keys()
 
 # Create the CSV file if it does not exist
-    if not os.path.exists(log_file):
-        with open(log_file, mode='w', newline='') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerow(headers)
+ #   if not os.path.exists(log_file):
+  #      with open(log_file, mode='w', newline='') as csv_file:
+   #         writer = csv.writer(csv_file)
+    #        writer.writerow(headers)
 
 # Write the dictionary values to the CSV file
-    with open(log_file, mode='a', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=headers)
-        writer.writerow(response_dict)
+    #with open(log_file, mode='a', newline='') as csv_file:
+     #   writer = csv.DictWriter(csv_file, fieldnames=headers)
+      #  writer.writerow(response_dict)
 
 # Check for error
 except (ATREUninitializedError, ATRuntimeError, ATScriptNotFound, ATScriptSyntaxError, ATSerialPortError) as e:
