@@ -25,8 +25,6 @@ if not args.logfile.endswith('.csv'):
         args.logfile = file_split[0] + '.csv'
     else:
         args.logfile += '.csv'
-print(args.logfile)
-exit(0)
 # Configuration
 line_break = '\r\n'
 baud_rate = 115200
