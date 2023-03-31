@@ -78,12 +78,6 @@ def execute_command(command):
     return response
 
 try:
-    execute_command('AT+CIMI')
-    execute_command('AT+cfun=0')
-#    execute_command('AT+CGDCONT=1,"IPV4V6","oai"')
-    time.sleep(3)
-    execute_command('AT+cfun=1')
-    time.sleep(5)
   # Execute each AT command once and store the results in a variable
     csq_response = execute_command('AT+CSQ').full_response[1].strip("'").split(',')
     qrsrp_response = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')

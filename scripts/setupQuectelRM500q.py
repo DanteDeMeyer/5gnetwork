@@ -10,7 +10,7 @@ from attila.exceptions import ATREUninitializedError, ATRuntimeError, ATScriptNo
 parser = argparse.ArgumentParser(description='CLI tool for interacting with a Quectel modem')
 parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial device path')
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
-parser.add_argument('-s', '--setup', action="store_true", help='choose full setup +logs or capture logs')
+parser.add_argument('-s', '--setup', action="store_false", help='choose full setup +logs or capture logs')
 args = parser.parse_args()
 
 # Configuration
@@ -59,13 +59,13 @@ def execute_command(command):
 
 try:
     if args.setup:
-	print(time.asctime(time.localtime()))
+        Time = time.asctime(time.localtime())
+        print(Time)
         execute_command('AT+CIMI')
         execute_command('AT+cfun=0')
         time.sleep(3)
         execute_command('AT+cfun=1')
     else:
-	print(time.asctime(time.localtime()))
         execute_command('AT+cfun=0')
         time.sleep(3)
         execute_command('AT+cfun=1')
@@ -75,12 +75,12 @@ try:
         execute_command('AT+CFUN=1,1')
         execute_command('AT+CGDCONT=2')
         execute_command('AT+CGDCONT=3')
-	execute_command('AT+QNWPREFCFG= "nr5g_band",78')
-	execute_command('AT+QNWPREFCFG= "mode_pref",NR5G')
-	execute_command('AT+CGACT=1,1')
-	execute_command('AT+CGPADDR=1')
-	execute_command('AT+QSCAN')
-	execute_command('AT+cfun=0')
+        execute_command('AT+QNWPREFCFG= "nr5g_band",78')
+        execute_command('AT+QNWPREFCFG= "mode_pref",NR5G')
+        execute_command('AT+CGACT=1,1')
+        execute_command('AT+CGPADDR=1')
+        execute_command('AT+QSCAN')
+        execute_command('AT+cfun=0')
         time.sleep(3)
         execute_command('AT+cfun=1')
 
