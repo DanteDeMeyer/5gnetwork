@@ -25,7 +25,8 @@ bandwidth=$5
 direction=$6
 
 # Run the iperf3 and add timestamp
-timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-echo $timestamp >> "$log_file"
-iperf3 -c "$ip_addr" "$protocol" -t"$duration" -b "$direction" "$bandwitdh" | awk '{print $7,$8,$9,$10}'| head -n 14 | tail -n 10
+for (( i=1; i<=$duration; i++ ))
+do
+    iperf3 -c "$ip_addr" "protocol" -b  "$direction" "bandwitdh" -t 1 -J | jq -r '.start.timestamp.timesecs as $start | .intervals[] | [(($start | tonumber), (.streams[0].bits_per_second/1000000), (.streams[0].jitter_ms))] | @csv'| awk -F, '{print strftime("%Y-%m-%d %H:%M:%S", $1), $2, $3}' >> "$log_file"
+done
 echo iperf3 successfully done for $2 seconds to $1
