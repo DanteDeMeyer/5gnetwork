@@ -20,9 +20,13 @@ log_file=/home/dante/logs/$log_file_name.csv
 bandwidth=$4
 direction=$5
 
-# Run the iperf3 and add timestamp
+# Run the iperf3 command for the specified duration, with a sleep of 1 second between each iteration
 for (( i=1; i<=$duration; i++ ))
 do
-    iperf3 -c "$ip_addr" "$protocol" -b  "$direction" "$bandwitdh" -t 1 -J | jq -r '.start.timestamp.timesecs as $start | .intervals[] | [(($start | tonumber), (.streams[0].bits_per_second/1000000), (.streams[0].jitter_ms))] | @csv'| awk -F, '{print strftime("%Y-%m-%d %H:%M:%S", $1), $2, $3}' >> "$log_file"
+    # Run iperf3 and extract timestamp and bitrate using jq, then append to log file
+    iperf3 -c "$ip_addr" "$protocol" -b  "$direction" "$bandwitdh" -t 1 -J | jq -r '.start.timestamp as $start | .intervals[] | [($start.timesecs | strftime("%Y-%m-%d %H:%M:%S")), (.streams[0].bits_per_second/1000000)] | @csv' >> "$log_file"
+    sleep 1
 done
-echo iperf3 successfully done for $2 seconds to $1
+
+# Print completion message
+echo iperf3 successfully done for $2 seconds to $1 saved in "$log_file"
