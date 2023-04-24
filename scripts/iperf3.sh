@@ -24,7 +24,7 @@ direction=$5
 for (( i=1; i<=$duration; i++ ))
 do
     # Run iperf3 and extract timestamp and bitrate using jq, then append to log file
-    iperf3 -c "$ip_addr" "$protocol" -b  "$direction" "$bandwitdh" -t 1 -J | jq -r '.start.timestamp as $start | .intervals[] | [($start.timesecs | strftime("%Y-%m-%d %H:%M:%S")), (.streams[0].bits_per_second/1000000)] | @csv' >> "$log_file"
+    iperf3 -c "$ip_addr" "$protocol" -b  "$bandwitdh" "$direction" -t 1 -J | jq -r '.start.timestamp as $start | .intervals[] | [($start.timesecs | strftime("%Y-%m-%d %H:%M:%S")), (.streams[0].bits_per_second/1000000)] | @csv' >> "$log_file"
     sleep 1
 done
 
