@@ -21,13 +21,13 @@ fi
 ip_addr=$1
 duration=$2
 log_file=/home/dante/logs/$3
-
+measurement $4
 #run ping command and log results
 for (( i=1; i<=$duration; i++ ))
 do
     timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     latency=$(ping -c 1 "$ip_addr" | awk -F'=' '/time/ {print $4}' | sed 's/ms//')
-    echo "\"$timestamp\",$latency"
-    echo "\"$timestamp\",$latency" >> "$log_file"
+    echo "$measurement,\"$timestamp\",$latency"
+    echo "measurement,\"$timestamp\",$latency" >> "$log_file"
     sleep 1
 done

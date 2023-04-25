@@ -10,7 +10,7 @@ fi
 ip_addr=$1
 log_file_name=$(echo "$2" | sed 's/\.[^.]*$//')
 log_file=/home/dante/logs/$log_file_name.csv
-
+measurement= $3
 # Get current date and time
 datetime=$(date +"%Y-%m-%d %H:%M:%S")
 
@@ -20,7 +20,7 @@ bitrate=$(echo "$iperf_output" | grep receiver | awk '{print $7}')
 jitter=$(echo "$iperf_output" | grep receiver | awk '{print $9}')
 
 # Print results to console
-echo "$datetime,$bitrate,$jitter"
+echo "$measurement,$datetime,$bitrate,$jitter"
 
 # Append results to CSV log file
-echo "$datetime,$bitrate,$jitter" >> "$log_file"
+echo "$measurement,$datetime,$bitrate,$jitter" >> "$log_file"

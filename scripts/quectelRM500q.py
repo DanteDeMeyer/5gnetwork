@@ -11,6 +11,7 @@ from attila.exceptions import ATREUninitializedError, ATRuntimeError, ATScriptNo
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='CLI tool for interacting with a Quectel modem')
+parser.add_argument('-m', '--measure')
 parser.add_argument('-d', '--device', default='/dev/ttyUSB2', help='serial device path')
 parser.add_argument('-t', '--timeout', type=int, default=2, help='serial timeout in seconds')
 parser.add_argument('-l', '--logdir', default='/home/dante/logs', help='logging directory')
@@ -86,6 +87,7 @@ try:
 
     # Populate the dictionary with the results
     response_dict = {
+        'Measurement' : args.measure,
         'Date': time.asctime(time.localtime()),
         'RSSI (dBm)': csq_response[0].split(':')[1],
         'PRX path RSRP value (dBm)': qrsrp_response[0].split(':')[1],
