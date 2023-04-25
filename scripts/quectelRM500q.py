@@ -73,38 +73,37 @@ response_dict={}
 # Function to execute command and log response
 def execute_command(command):
     response = atrunenv.exec(command)
-    print(command)
-    response_code = response.full_response[1].strip("'")
-    print(response_code)
-    return response
+    response_code = response.full_response[2].strip("'")
+    return response_code
 
 try:
   # Execute each AT command once and store the results in a variable
-    csq_response = execute_command('AT+CSQ').full_response[1].strip("'").split(',')
-    qrsrp_response = execute_command('AT+QRSRP').full_response[1].strip("'").split(',')
-    qrsrq_response = execute_command('AT+QRSRQ').full_response[1].strip("'").split(',')
-    qsinr_response = execute_command('AT+QSINR').full_response[1].strip("'").split(',')
-
+    while 1:
+        csq_response = execute_command('AT+CSQ').split(',')
+        qrsrp_response = execute_command('AT+QRSRP').split(',')
+        qrsrq_response = execute_command('AT+QRSRQ').split(',')
+        qsinr_response = execute_command('AT+QSINR').split(',')
+        qeng_response = execute_command('AT+QENG="servingcell"').split(',')
     # Populate the dictionary with the results
-    response_dict = {
-        'Measurement' : args.measure,
-        'Date': time.asctime(time.localtime()),
-        'RSSI (dBm)': csq_response[0].split(':')[1],
-        'PRX path RSRP value (dBm)': qrsrp_response[0].split(':')[1],
-        'DRX path RSRP value (dBm)': qrsrp_response[1],
-        'RX2 path RSRP value (dBm)': qrsrp_response[2],
-        'RX3 path RSRP value (dBm)': qrsrp_response[3],
-        'PRX path RSRQ value (dB)': qrsrq_response[0].split(':')[1],
-        'DRC path RSRQ value (dB)': qrsrq_response[1],
-        'RX2 path RSRQ value (dB)': qrsrq_response[2],
-        'RX3 path RSRQ value (dB)': qrsrq_response[3],
-        'PRX path SINR value (dB)': qsinr_response[0].split(':')[1],
-        'DRX path SINR value (dB)': qsinr_response[1],
-        'RX2 path SINR value (dB)': qsinr_response[2],
-        'RX3 path SINR value (dB)': qsinr_response[3]
-    }
-    print(response_dict)
-
+        response_dict = {
+            'Measurement' : args.measure,
+            'Date': time.asctime(time.localtime()),
+            'RSSI (dBm)': csq_response[0].split(':')[1],
+            'PRX path RSRP value (dBm)': qrsrp_response[0].split(':')[1],
+            'DRX path RSRP value (dBm)': qrsrp_response[1],
+            'RX2 path RSRP value (dBm)': qrsrp_response[2],
+            'RX3 path RSRP value (dBm)': qrsrp_response[3],
+            'PRX path RSRQ value (dB)': qrsrq_response[0].split(':')[1],
+            'DRC path RSRQ value (dB)': qrsrq_response[1],
+            'RX2 path RSRQ value (dB)': qrsrq_response[2],
+            'RX3 path RSRQ value (dB)': qrsrq_response[3],
+            'PRX path SINR value (dB)': qsinr_response[0].split(':')[1],
+            'DRX path SINR value (dB)': qsinr_response[1],
+            'RX2 path SINR value (dB)': qsinr_response[2],
+            'RX3 path SINR value (dB)': qsinr_response[3],
+            'gNB_ID':qeng_response[6]
+        }
+        time.sleep(1)
 # Get the headers from the dictionary keys
     headers = response_dict.keys()
 

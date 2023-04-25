@@ -21,7 +21,7 @@ fi
 ip_addr=$1
 duration=$2
 log_file=/home/dante/logs/$3
-measurement $4
+measurement=$4
 #run ping command and log results
 for (( i=1; i<=$duration; i++ ))
 do

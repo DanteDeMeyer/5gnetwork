@@ -10,7 +10,7 @@ fi
 ip_addr=$1
 log_file_name=$(echo "$2" | sed 's/\.[^.]*$//')
 log_file=/home/dante/logs/$log_file_name.csv
-measurement= $3
+measurement=$3
 # Get current date and time
 datetime=$(date +"%Y-%m-%d %H:%M:%S")
 
