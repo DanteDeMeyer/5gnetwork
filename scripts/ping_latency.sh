@@ -27,6 +27,7 @@ for (( i=1; i<=$duration; i++ ))
 do
     timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     latency=$(ping -c 1 "$ip_addr" | awk -F'=' '/time/ {print $4}' | sed 's/ms//')
+    echo "\"$timestamp\",$latency"
     echo "\"$timestamp\",$latency" >> "$log_file"
     sleep 1
 done

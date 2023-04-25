@@ -8,12 +8,19 @@ fi
 
 # Define variables
 ip_addr=$1
-log_file_name=$(echo "$3" | sed 's/\.[^.]*$//')
+log_file_name=$(echo "$2" | sed 's/\.[^.]*$//')
 log_file=/home/dante/logs/$log_file_name.csv
 
-# Run the iperf3 command for the specified duration, with a sleep of 1 second between each iteration
-    # Run iperf3 and extract timestamp and bitrate using jq, then append to log file
-    iperf3 -c "$ip_addr" -u -b  100m -R -J | jq -r '.start.timestamp as $start | .end | [($start.timesecs | strftime("%Y-%m-%d %H:%M:%S")), (.streams[0].bits_per_second/1000000), (.streams[0].jitter_ms)] | @csv' >> "$log_file"
+# Get current date and time
+datetime=$(date +"%Y-%m-%d %H:%M:%S")
 
-# Print completion message
-echo iperf3 successfully to $1 saved in "$log_file"
+# Run iperf3 and extract bitrate and jitter using awk
+iperf_output=$(iperf3 -c "$ip_addr" -u -b 100M -R)
+bitrate=$(echo "$iperf_output" | grep receiver | awk '{print $7}')
+jitter=$(echo "$iperf_output" | grep receiver | awk '{print $9}')
+
+# Print results to console
+echo "$datetime,$bitrate,$jitter"
+
+# Append results to CSV log file
+echo "$datetime,$bitrate,$jitter" >> "$log_file"
