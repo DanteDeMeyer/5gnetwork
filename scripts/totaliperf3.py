@@ -20,9 +20,6 @@ if not args.logfile.endswith('.csv'):
         args.logfile = file_split[0] + '.csv'
     else:
         args.logfile += '.csv'
-# Configuration
-line_break = '\r\n'
-baud_rate = 115200
 
 # Check if log directory exists, create it if not
 if not os.path.exists(args.logdir):
