@@ -105,19 +105,19 @@ try:
         }
         time.sleep(1)
 # Get the headers from the dictionary keys
-    headers = response_dict.keys()
+        headers = response_dict.keys()
 
 # Create the CSV file if it does not exist
-    if not os.path.exists(path):
-        log_file = os.path.join(args.logdir, args.logfile)
-        with open(log_file, mode='w', newline='') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerow(headers)
+        if not os.path.exists(path):
+            log_file = os.path.join(args.logdir, args.logfile)
+            with open(log_file, mode='w', newline='') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(headers)
 
 # Write the dictionary values to the CSV file
-    with open(path, mode='a', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=headers)
-        writer.writerow(response_dict)
+        with open(path, mode='a', newline='') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=headers)
+            writer.writerow(response_dict)
 
 # Check for error
 except (ATREUninitializedError, ATRuntimeError, ATScriptNotFound, ATScriptSyntaxError, ATSerialPortError) as e:
