@@ -28,6 +28,6 @@ do
     timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     latency=$(ping -c 1 "$ip_addr" | awk -F'=' '/time/ {print $4}' | sed 's/ms//')
     echo "$measurement,\"$timestamp\",$latency"
-    echo "measurement,\"$timestamp\",$latency" >> "$log_file"
+    echo "$measurement,\"$timestamp\",$latency" >> "$log_file"
     sleep 1
 done
