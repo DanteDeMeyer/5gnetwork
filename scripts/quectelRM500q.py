@@ -87,7 +87,7 @@ try:
     # Populate the dictionary with the results
         response_dict = {
             'Measurement' : args.measure,
-            'Date': time.asctime(time.localtime()),
+            'Date': datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             'RSSI (dBm)': csq_response[0].split(':')[1],
             'PRX path RSRP value (dBm)': qrsrp_response[0].split(':')[1],
             'DRX path RSRP value (dBm)': qrsrp_response[1],

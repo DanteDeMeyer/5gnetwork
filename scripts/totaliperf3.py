@@ -51,8 +51,8 @@ for i, interval in enumerate(data['intervals']):
         lost_percent = stream['lost_percent']
         key = f'{start}-{end}'
         data_dict[key] = {
-            'date_time': date_time.strftime('%a, %d %b %Y %H:%M:%S %Z'),
             'measurement': args.measure,
+            'date_time': date_time.strftime('%a, %d %b %Y %H:%M:%S %Z'),
             'interval': f'{start}-{end}',
             'transfer': bytes,
             'bitrate': bitrate,
