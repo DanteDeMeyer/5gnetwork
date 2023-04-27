@@ -17,13 +17,13 @@ while True:
             subprocess.run(process, shell=True)
         elif script_num == '3':
             measurement = input("Enter measurement number: ")
-            process = f"sudo python3 quectelRM500q.py -f AT.csv -m {measurement}"
-            subprocess.run(process, shell=False)
+            process = ["sudo", "python3", "quectelRM500q.py", "-f", "ATtest.csv", "-m", measurement]
+            subprocess.run(process)
         elif script_num == '4':
-            subprocess.run(['sudo python3 setupQuectelRM500q.py'], shell=False)
+            subprocess.run(['sudo', 'python3', 'setupQuectelRM500q.py'])
         elif script_num == '5':
             measurement = input("Enter measurement number: ")
-            process = f"sudo python3 totaliperf3.py -f totaliperf.csv -m {measurement}"
-            subprocess.run(process, shell=False)
+            process = ['sudo', 'python3', 'totaliperf3.py', '-f', 'totaliperf.csv', '-m', measurement]
+            subprocess.run(process)
     else:
         print("Invalid input. Please enter a number from 1 to 5.")
