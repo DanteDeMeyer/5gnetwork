@@ -17,11 +17,19 @@ if ! [[ "$2" =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 
+
 # Define variables
 ip_addr=$1
 duration=$2
 log_file=/home/dante/logs/$3
 measurement=$4
+
+# Check if the log file exists
+if [ ! -f "$log_file" ]; then
+    # Create the file and add column names as the first row
+    echo "Measurement,Timestamp,Latency" > "$log_file"
+fi
+
 #run ping command and log results
 for (( i=1; i<=$duration; i++ ))
 do
